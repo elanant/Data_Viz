@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  top50-dashboard:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./top50.csv:/app/top50.csv
+    environment:
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
